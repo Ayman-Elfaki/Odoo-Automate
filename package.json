@@ -1,0 +1,38 @@
+{
+  "name": "odoo-automate",
+  "description": "Odoo - Automate ",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "dexie": "^4.3.0",
+    "@mantine/core": "^8.3.14",
+    "@mantine/form": "^8.3.14",
+    "@tanstack/react-router": "^1.159.5",
+    "@webext-core/messaging": "^2.3.0"
+  },
+  "devDependencies": {
+    "@tanstack/router-plugin": "^1.158.1",
+    "@types/react": "^19.2.13",
+    "@types/react-dom": "^19.2.3",
+    "@wxt-dev/auto-icons": "^1.1.0",
+    "@wxt-dev/module-react": "^1.1.5",
+    "postcss": "^8.5.6",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "^5.9.3",
+    "wxt": "^0.20.15"
+  }
+}
