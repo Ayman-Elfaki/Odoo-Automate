@@ -8,7 +8,7 @@ export const Route = createFileRoute('/privacy')({
 function RouteComponent() {
     return (
         <Stack justify='center' align='center'>
-            <Title order={2} >Privacy policy</Title>
+            <Title order={2} >Privacy Policy</Title>
             <Text ta='justify'>
                 We are committed to protecting your privacy and ensuring transparency about how the Extension operates.
                 The Extension is designed solely to automate repetitive actions within Odoo instances based on user-defined rules.
