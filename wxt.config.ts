@@ -2,18 +2,17 @@ import { defineConfig } from 'wxt';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 
 export default defineConfig({
-  imports: {
-    dirs: ['services']
-  },
   srcDir: 'src',
   manifest: {
     name: 'Odoo Automate',
     description: 'Odoo Automate - Automate Repetitive Actions Within Odoo',
     permissions: ['tabs', 'webNavigation'],
-    web_accessible_resources: [{
-      matches: ['<all_urls>'],
-      resources: ['injected.js'],
-    }]
+    web_accessible_resources: [
+      {
+        matches: ['<all_urls>'],
+        resources: ['injected.js'],
+      },
+    ]
   },
   autoIcons: {
     developmentIndicator: 'overlay'

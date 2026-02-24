@@ -1,11 +1,11 @@
-import { OptionEntity } from "@/services/store";
+import { OptionEntity } from "@/utils/store";
 import { defineExtensionMessaging } from "@webext-core/messaging";
 
 interface BackgrondProtocolMap {
     getOptions(): OptionEntity | undefined
     setOptions(data: { options: Partial<OptionEntity> }): void
 
-    onPageUpdated(url: string | URL): void
+    onPageUpdated(data: { url: string | URL }): void
     onOptionsUpdated(data: { options: OptionEntity }): void
 }
 

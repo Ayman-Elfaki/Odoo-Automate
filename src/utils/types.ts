@@ -28,10 +28,18 @@ export type PosOrder = {
     JSONuiState: string
 }
 
+
+
 declare global {
     interface Window {
-        posmodel?: {
-            getOrder: () => Promise<PosOrder>
-        }
+        odoo: {
+            info: {
+                db: string
+                server_version: string
+                server_version_info: [number, number, number, string, number, string]
+                isEnterprise: boolean
+            }
+        },
+        posmodel?: { getOrder: () => Promise<PosOrder> } | { get_order: () => Promise<PosOrder> }
     }
 }

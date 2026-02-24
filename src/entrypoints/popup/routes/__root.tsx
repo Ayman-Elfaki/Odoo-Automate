@@ -1,5 +1,5 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { Box, Grid } from '@mantine/core';
+import { Box } from '@mantine/core';
 
 export const Route = createRootRoute({
   component: RootComponent,
