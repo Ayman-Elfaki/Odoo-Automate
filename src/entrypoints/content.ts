@@ -1,36 +1,36 @@
 import { OptionEntity } from "@/utils/store";
 import { OptionsUpdatedEvent } from "@/utils/events";
+import { filter, map, mergeMap, distinctUntilChanged } from 'rxjs';
+
 
 export default defineContentScript({
   matches: ['*://*.odoo.com/pos/*'],
   async main() {
 
-    const patterns = [
-      new MatchPattern('*://*.odoo.com/pos/ui/*/product/*'),
-      new MatchPattern('*://*.odoo.com/pos/ui/*/payment/*'),
-      new MatchPattern('*://*.odoo.com/pos/*'),
-    ];
-
     onMessage('onOptionsUpdated', async ({ data: { options } }) => {
-
       handleCustomerChange();
       handleNotifcation(options);
       handleAutoInvoiceChange(options);
-
     });
 
     onMessage('onPageUpdated', async ({ data: { url } }) => {
-
-      if (patterns.every(u => !u.includes(url))) return;
-
-      const options = await sendMessage('getOptions');
-
-      handleCustomerChange();
-      handleNotifcation(options);
-      handleAutoInvoiceChange(options);
-
+      updateUI(url);
     });
 
+
+    observeOnMutation(document.body)
+      .pipe(mergeMap(muts => muts.flatMap(p => Array.from(p.addedNodes))))
+      .pipe(filter(node => node.nodeType === Node.ELEMENT_NODE && node instanceof HTMLElement))
+      .pipe(map(node => (node as HTMLElement).querySelector('div.input-group, div.main-content')))
+      .pipe(filter(node => node !== null))
+      .pipe(distinctUntilChanged())
+      .subscribe(async element => {
+        const info = await sendMessage('getTabInfo');
+        if (!element || !info || !info.url) return;
+        updateUI(info.url);
+      });
+
+      
     await injectScript('/injected.js', {
       keepInDom: true,
       modifyScript(script) { script.defer = true; }
@@ -39,6 +39,26 @@ export default defineContentScript({
   }
 
 });
+
+
+const updateUI = async (url: string | URL) => {
+
+  const patterns = [
+    new MatchPattern('*://*.odoo.com/pos/ui/*/product/*'),
+    new MatchPattern('*://*.odoo.com/pos/ui/*/payment/*'),
+    new MatchPattern('*://*.odoo.com/pos/*'),
+  ];
+
+  if (patterns.every(u => !u.includes(url))) return;
+
+  const options = await sendMessage('getOptions');
+
+  handleCustomerChange();
+  handleNotifcation(options);
+  handleAutoInvoiceChange(options);
+
+
+}
 
 const handleNotifcation = (options?: OptionEntity) => {
   if (!options) return;

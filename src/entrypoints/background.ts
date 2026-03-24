@@ -21,8 +21,22 @@ export default defineBackground({
       .pipe(debounceTime(100))
       .subscribe(onPageUpdated);
 
+
     onMessage('getOptions', () => {
       return new OptionRepository().getOptions();
+    });
+
+    
+    onMessage('getTabInfo', async () => {
+
+      const patterns = [
+        new MatchPattern('*://*.odoo.com/pos/*'),
+      ];
+
+      let [tab] = (await browser.tabs.query({ active: true, currentWindow: true }))
+        .filter(t => patterns.some(u => t.url && u.includes(t.url)));
+
+      return tab;
     });
 
     onMessage('setOptions', async ({ data: { options } }) => {
@@ -63,8 +77,7 @@ const onOptionsUpdated = async ({ options }: { options: Partial<OptionEntity> })
   const updatedOptions = await optionsRepository.getOptions();
 
   const patterns = [
-    new MatchPattern('*://*.odoo.com/pos/ui/*/product/*'),
-    new MatchPattern('*://*.odoo.com/pos/ui/*/payment/*')
+    new MatchPattern('*://*.odoo.com/pos/*'),
   ];
 
   let [tab] = (await browser.tabs.query({ active: true, currentWindow: true }))
